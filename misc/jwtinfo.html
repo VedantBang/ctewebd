@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>JWT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style type="text/css">
+      .code {
+        font-family: monospace;
+      }
+      .red {
+        color: rgb(251, 1, 91);
+      }
+      .purple {
+        color: rgb(214, 58, 255);
+      }
+      .blue {
+        color: rgb(0, 185, 241);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-gray-50 p-1 shadow-lg pl-2">
+      <div
+        class="text-gray-800 text-3xl font-bold py-5 px-6"
+        style="font-family: 'Montserrat'"
+      >
+        JSON Web Tokens - What are they and how do they work?
+      </div>
+    </div>
+      
+    <div
+      class="
+        pt-4
+        text-md
+        bg-gray-100
+        font-semibold
+        text-lg
+        space-y-2.5
+        py-3
+        px-8
+        text-gray-800
+        relative
+      "
+      style="font-family: 'Noto Sans Kr'"
+    >
+
+    <h4>JWTs are are an open, industry standard RFC 7519 method for representing claims securely between two parties.</h4>
+
+    <h4>In simple language, JWT is a piece of text that allows servers to assign secure identity to a client, and allows clients to prove their identity as and when required by the server.</h4>
+
+    <h4>Before I move forward, let me explain a bit about 'Encoding'. Encoding refers to a representation of the characters we use in everyday language [Alphabets, Numbers, Mathematical symbols, Characters from other languages etc] into a form that can be recognised by the computer.</h4
+    >
+
+    <h4>The computer doesn't know what is the letter 'A' or what is the meaning of number 69 unless it can associate these characters with certain patterns. Encodings are important for other purposes too, like uniform processing of data and data transmission across computers. Further the encoding should be such that different computers are able to understand each other, when exchanging data.</h4>
+
+    <h4>The simplest encoding is the ASCII encoding. It originally used a 7-bit number to represent characters. Later, an eighth bit was added for ease of storage and processing. The image below depicts the ASCII encoding scheme. Each character is an 8-bit binary number. Binary numbers can be written in decimal, octal and hexadecimal numeral systems too, but finally they mean the same thing.</h4>
+
+    <a href="https://bournetocode.com/projects/GCSE_Computing_Fundamentals/pages/img/ascii_table_lge.png" target="_blank">
+    <img src="https://bournetocode.com/projects/GCSE_Computing_Fundamentals/pages/img/ascii_table_lge.png" style="height: 30em; margin-left: auto; margin-right: auto; margin-top: 1em; margin-bottom: 1em;" /></a>
+
+    <h4>Therefore, the word 'CTE' would be written in ASCII as '01000011 01010100 01000101' when following binary. In hexadecimal, it would be written as '43 54 45' (from the above table). Hexadecimal assigns a character from 0-9,A-F to every group of 4 bits. Hence, 0000 means 0, 0001 means 1, 0010 means 2 .... 1000 means 8, 1001 means 9, 1010 means A .... 1111 means F. </h4>
+
+    <h4>Now let me introduce another form of encoding, which is called as Base 64. Instead of storing data in groups of 8 bits, Base 64 uses groups of 6 bits. With 6 bits, the number of symbols required for representation is 2^6 which is 64. This is similar to hexadecimal, which uses a symbol for every group of 4 bits, therefore it needs 2^4, which is 16 symbols.</h4>
+
+    <h4>The 16 symbols of hexadecimal are 0-9,A-F.</h4>
+    <h4>The 64 symbols of Base 64 are uppercase A-Z, lowercase a-z, numbers 0-9, special characters + and /. Base 64 also uses the concept of padding, which I will explain further.</h4>
+
+    <a href="https://media.geeksforgeeks.org/wp-content/uploads/20200520142906/1461.png" target="_blank">
+    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20200520142906/1461.png" style="height: 30em; margin-left: auto; margin-right: auto; margin-top: 1em; margin-bottom: 1em;"/>
+    </a>
+
+    <h4>The picture above shows how each group of 6 bits relates to a symbol. Now let us attempt to encode <span class="code">'CTE'</span>, which is currently in ASCII, into Base 64.</h4>
+    <h4><span class="code">'CTE'</span> in binary in groups of 8: <span class="code">'01000011 01010100 01000101'</span>.</h4>
+    <h4>Regrouping the same binary sequence into groups of 6 gives us:</h4>
+    <h4 class="code">010000 110101 010001 000101</h4>
+    <h4>Converting it into symbols using the table above: <span class="code">Q1RF</span></h4>
+    <h4>Hence <span class="code">'CTE'</span> in ASCII corresponds to <span class="code">Q1RF</span> in Base 64.</h4>
+    <br />
+    <h4>Let me take another example, with the ASCII word <span class="code">'Tree'</span>.</h4>
+    <h4>Converted to binary sequence: <span class="code">01010100 01110010 01100101 01100101</span></h4>
+    <h4>Regrouping into 6 bit groups: <span class="code">010101 000111 001001 100101 011001 01</span></h4>
+    <h4>Here we are falling short of 4 bits in the last group. Therefore, extra zeroes are added to the last group so as to form a group of 6 bits:</h4>
+    <h4>010101 000111 001001 100101 011001 010000</h4>
+    <h4>Converting this into symbols, using the Base 64 table above: VHJlZQ</h4>
+    <h4>But since we added extra zeroes to the binary sequence, we need to signify that information too. This is done by adding the character '=' for each pair of zeroes added.</h4>
+    <h4>Therefore, 'Tree' converted to Base 64 will be 'VHJlZQ=='.</h4>
+    <h4>With that, I'd like to wrap up this segment about Base 64. Lets move on to JWT (finally).</h4>
+    <br /><br />
+
+    <h4>A typical JWT looks like this string:</h4>
+    <div class="code" style="overflow: scroll;"><span class="red">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span>.<span class="purple">eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ</span>.<span class="blue">M_LPbo1pNNsy00Y2lxrLtpLUwQKyBDHvvmGIFZx39IQ</span></div>
+
+    <h4>It consists of three parts, seperated by dot characters(.)</h4>
+    <h4>The first part (in red) is encoded in Base 64 and is called as the Header. If you convert it to ASCII you will end up with a stringified JavaScript Object similar to this:</h4>
+    <pre class="red">
+      {
+        "alg": "HS256",
+        "typ": "JWT"
+      }
+    </pre>
+    <h4>This object stores the type of algorithm used to hash the token (more on this later), and the type of the token, which is JWT obviously.</h4>
+
+    <h4>The second part (in purple) is also encoded in Base 64 and is called as the Payload. If you convert it to ASCII you will end up with a stringified JavaScript Object similar to this:</h4>
+    <pre class="purple">
+      {
+        "sub": "1234567890",
+        "name": "John Doe",
+        "iat": 1516239022
+      }
+    </pre>
+    <h4>This object stores data relevant to the purpose of the token. For exmaple, it can store the username or email, or some other information relevant to the identity of the user.</h4>
+
+    <h4>The third part (in blue) is the digest of the hash generated by using the hashing algorithm specified in the Header (red) object. You can read up about hashing <a href="https://cheapsslsecurity.com/blog/decoded-examples-of-how-hashing-algorithms-work/" target="_blank" class="text-gray-700 underline tracking-wider font-mono">
+    here</a>.
+    </h4>
+
+    <h4>The hash is calculated in the following way:</h4>
+    <h4>String to be hashed: <span class="red">base64(header javascript object)</span>.<span class="purple">base64(payload javascript object)</span></h4>
+    <h4>This string formed above is hashed with a 'key' of the developer's choice.</h4>
+    <h4>String -> Hash(string,key) -> <span class="blue">Digest</span>.</h4>
+    <h4>The digest looks like this: <span class="code blue">M_LPbo1pNNsy00Y2lxrLtpLUwQKyBDHvvmGIFZx39IQ</span>. It is unique for every string.</h4>
+    <br />
+    <h4>Finally the JWT is formed as follows:</h4>
+    <h4><span class="red">header in base64</span>.<span class="purple">payload in base64</span>.<span class="blue">digest</span></h4>
+
+    <h4>The hashing ensures that the JWT is unique for each unique payload. And therefore it can be used as an identity for users. The authenticity of the JWT can be verified anytime by the server by taking the red and purple parts of the JWT, and hashing them using the key. The resultant digest should be exactly the same as the blue part of the JWT. This feature of JWTs ensures that nobody can manipulate the payload part of the JWT. If someone attempted to do that, they would have to calculate a new digest too. And to calculate the hash, they would need the key (which is kept a secret, on the server side).</h4>
+
+    <h4>So whenever a user logs in, the server can take a unique feature of the user (email for example), put it into the payload. After this, the server can hash and form the JWT (this action is also called as signing the token), and send it back to the user. With every subsequent request, the client can include the JWT, in the headers, or in the body of the request itself, to prove its identity.</h4>
+
+    <h4>All these operations might seems complicated, but the creators of JWT have also created libraries in a vast number of programming languages. You can easily use those libraries to easily generate JWT from payloads, and to verify the authenticity of a JWT. Check out <a href="https://www.npmjs.com/package/jsonwebtoken" target="_blank" class="text-gray-700 underline tracking-wider font-mono">jsonwebtoken</a>. Now you are ready to solve Question 6!</h4>
+
+      <div>
+        <a href="../Questions/page6.html">
+          <span class="bg-gray-800 text-gray-50 px-3.5 py-2 rounded-md absolute right-0 bottom-2">Back</span>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

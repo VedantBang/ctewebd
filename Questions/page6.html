@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Question 6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style type="text/css">
+      .code {
+        font-family: monospace;
+      }
+      .gray {
+        color: gray;
+      }
+      .green {
+        color: green;
+      }
+      .red {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-gray-50 p-1 shadow-lg pl-2">
+      <div
+        class="text-gray-800 text-3xl font-bold py-5 px-6"
+        style="font-family: 'Montserrat'"
+      >
+        Authentication and JSON Web Tokens
+      </div>
+    </div>
+    <div class="bg-gray-800 text-gray-50 py-5 px-8">
+      <div
+        class="list-disc mx-5 text-lg my-4 space-y-2 tracking-wide"
+        style="font-family: 'Noto Sans KR'"
+      >
+        <!-- li tags here -->
+        <li>
+          Before you proceed, please remove the Rate Limiting code (which was asked in the previous question) from your server, so that evaluation can be fast.
+        </li>
+        <li>
+          Authentication and Authorisation are two important processes which are generally handled by the backend. Let me explain the two with the example of the popular service, Discord.
+        </li>
+        <li>
+          When I visit discord.com and login to my account, I am authenticating myself to their backend server. Essentially, I am confirming my identity (linked with my email), so that I can access the services provided by discord.
+        </li>
+
+        <li>Authentication is done with simple techniques like asking the user for their username and password. For more secure applications, techniques like Two-Factor Auth, RSA Tokens and Hardware Security Keys are used. You can read up about <a href="https://www.crowdsupply.com/dicekeys/dicekeys" class="text-gray-300 underline tracking-wider font-mono" target="_blank">Dice Keys</a>, an interesting implementation of Hardware Security Keys.</li>
+
+        <li>Once a given user has been authenticated, the server sends a token of identification to the client, so that the server can recognise the user with every subsequent request.</li>
+
+        <li>This token can is usually a string, or a set of strings. The tokens are always encrypted, hashed or secured by certain means, so that no user is able to modify them. A hacker can find loopholes in your token system, and forge a token to impersonate the identity of another user.</li>
+
+        <li>
+          A quick, yet secure, way of creating Tokens is by using JSON Web Tokens, shortened as JWTs. The official website is <a href="https://jwt.io/" target="_blank" class="text-gray-300 underline tracking-wider font-mono">https://jwt.io</a>. 
+        </li>
+        <li>I have made a seperate page explaining JWTs <a href="../misc/jwtinfo.html" target="_blank" class="text-gray-300 underline tracking-wider font-mono">here</a>. It is recommended to read, unless you already know how to work with JWT.</li>
+      </div>
+    </div>
+    <h2 class="text-gray-800 bg-gray-100 text-xl px-7 font-mono pt-3">
+      Question:
+    </h2>
+    <div
+      class="
+        pt-4
+        text-md
+        bg-gray-100
+        font-semibold
+        text-lg
+        space-y-2.5
+        py-3
+        px-8
+        text-gray-800
+      "
+      style="font-family: 'Noto Sans Kr'"
+    >
+      <!-- h4 tags here -->
+      <h4>Write code for a backend server which can login and authenticate a user.</h4>
+      <h4>This page will make a POST request on <span class="code">'/login'</span>.</h4>
+      <h4>The body of the request will be of the type JSON and will contain the following data:</h4>
+      <pre>
+        {
+          "email":"mymail@pigeonmail.com",
+          "password":"pigeons_are_FBI_agents"
+        }
+      </pre>
+      <h4>On receiving the request, the server should validate the email and the password.</h4>
+      <h4>If the credentials are incorrect, then return a response with a status code of 401.</h4>
+      <h4>If the credentials are correct, the server should return a string, which is the JWT for the user. Set the payload of the JWT as follows:</h4>
+      <pre>
+        {
+          "email": email of user here,
+          "date": timestamp
+        }
+      </pre>
+      <h4>Use the HS256 algorithm to when creating the JWT (the default). You can choose your own key for generating the JWT. Enter the key, that you used on the server side, in the textfield provided below, and this page will check the authenticity of JWT returned by your server in the response to the login process.</h4>
+      <br />
+
+      <h4>Your server must also handle a GET request on the path <span class="code">'/getbankbalance'</span>.</h4>
+      <h4>This request will include a header named 'token'. This header will have the JWT (the string) that your server provided in response to login. The server must check the authenticity of the JWT.</h4>
+      <h4>If the JWT is valid, then return any random number (as a string) and a status code of 200.</h4>
+      <h4>If the JWT is invalid, return the response with a status code of 401.</h4>
+
+      <div>
+        <form class="mb-4">
+          <span class="mr-2">Server address : </span>
+          <input
+            type="text"
+            id="address"
+            class="
+              rounded-sm
+              border-2 border-gray-800
+              mr-4
+			  mb-3
+              font-normal
+              text-lg
+			  px-2
+              py-0.75
+              focus:border-gray-800
+            "
+          />
+          <br />
+          <span class="mr-2">Your key for JWT : </span>
+          <input
+            type="text"
+            id="key"
+            class="
+              rounded-sm
+              border-2 border-gray-800
+              mr-4
+        mb-3
+              font-normal
+              text-lg
+        px-2
+              py-0.75
+              focus:border-gray-800
+            "
+          />
+		  <br>
+          <span
+            class="
+              bg-gray-800
+              cursor-pointer
+              text-gray-50
+              px-3
+              py-1.5
+              text-md
+              rounded-md
+            "
+            onclick="check()"
+            >Submit</span
+          >
+        </form>
+      </div>
+      <h2 class="my-3" id="tasklist">Objectives Checklist:</h2>
+      <div class="list-disc">
+        <li class="gray" id="o1">
+          Login with correct credentials and get JWT in response
+        </li>
+        <li class="gray" id="o2">
+          Attempt login with wrong credentials and get 401 response
+        </li>
+        <li class="gray" id="o3">
+          Check authenticity of the JWT with the key provided in textfield.
+        </li>
+        <li class="gray" id="o4">
+          Get bank balance (string) by sending valid JWT in headers.
+        </li>
+        <li class="gray" id="o5">
+          Attempt to get bank balance with invalid JWT and get 401 response.
+        </li>
+      </div>
+	  <div class="relative">
+		<a href="../index.html">
+	<span class="bg-gray-800 text-gray-50 px-3.5 py-2 rounded-md absolute right-0 bottom-2">Home</span>
+	</a>
+	</div>
+    </div>
+
+    <script language="JavaScript" type="text/javascript"
+      src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js">
+    </script>
+
+    <script type="text/javascript">
+      async function check(){
+        document.querySelector("#tasklist").innerHTML = "Objectives Checklist: Running";
+        resetColors();
+        const address = document.querySelector('#address').value;
+        let jwt = await login(address);
+        await badlogin(address);
+        await checkJWT(jwt);
+        await bankbalance(address,jwt);
+        await badjwt(address,jwt);
+        document.querySelector("#tasklist").innerHTML = "Objectives Checklist: Finished running";
+      }
+
+      async function login(address){
+        try{
+          let response = await fetch(address+'/login', {
+            method: 'POST',
+            body: JSON.stringify({
+              email:"mymail@pigeonmail.com",
+              password:"pigeons_are_FBI_agents"
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          let jwt = await response.text();
+          let parts = jwt.split('.');
+          if(parts.length === 3){
+            right('o1');
+            return jwt;
+          } else {
+            wrong('o1');
+          }
+        }
+        catch(err){
+          console.log('Oops, an error occured:', err);
+          wrong('o1');
+        }
+      }
+
+      async function badlogin(address){
+        try{
+          let response = await fetch(address+'/login', {
+            method: 'POST',
+            body: JSON.stringify({
+              email:"mymail@pigeonmail.com",
+              password:"wrongpass"
+            }),
+            headers: {
+              'Content-Type':'application/json'
+            }
+          });
+          if(response.status === 401){
+            right('o2');
+          } else {
+            wrong('o2');
+          }
+        }
+        catch(err){
+          console.log('Oops, an error occured:',err);
+          wrong('o2');
+        }
+      }
+
+      async function checkJWT(jwt){
+        try{
+          const key = document.querySelector('#key').value;
+          if(!key){
+            throw new Error('Missing Key');
+          }
+          let isValid = KJUR.jws.JWS.verifyJWT(jwt, key, {alg: ['HS256']});
+          if(isValid){
+            right('o3');
+          } else {
+            wrong('o3');
+          }
+        }
+        catch(err){
+          console.log('Oops, an error occured:',err);
+          wrong('o3');
+        }
+      }
+
+      async function bankbalance(address,jwt){
+        try{
+          let response = await fetch(address+'/getbankbalance', {
+            method: 'GET',
+            headers: {
+              "token": jwt
+            }
+          });
+          let data = await response.text();
+          let balance = parseInt(data);
+          if(typeof balance === 'number'){
+            right('o4');
+          } else {
+            wrong('o4');
+          }
+        }
+        catch(err){
+          console.log('Oops, an error occured:',err);
+          wrong('o4');
+        }
+      }
+
+      async function badjwt(address,jwt){
+        try{
+          let response = await fetch(address+'/getbankbalance', {
+            method: 'GET',
+            headers: {
+              "token": jwt + (Math.floor(Math.random() * 10000))
+            }
+          });
+          if(response.status === 401){
+            right('o5');
+          } else {
+            wrong('o5');
+          }
+        }
+        catch(err){
+          console.log('Oops, an error occured:',err);
+          wrong('o5');
+        }
+      }
+
+      function resetColors() {
+        let arr = ["o1", "o2", "o3"];
+        for (let elem of arr) {
+          document.querySelector("#" + elem).classList.remove("green");
+          document.querySelector("#" + elem).classList.remove("red");
+          document.querySelector("#" + elem).classList.add("gray");
+        }
+      }
+
+      function right(id) {
+        document.querySelector("#" + id).classList.remove("gray");
+        document.querySelector("#" + id).classList.add("green");
+      }
+
+      function wrong(id) {
+        document.querySelector("#" + id).classList.remove("gray");
+        document.querySelector("#" + id).classList.add("red");
+      }
+    </script>
+  </body>
+</html>
