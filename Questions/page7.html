@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Question 7</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style type="text/css">
+      .code {
+        font-family: monospace;
+      }
+      .gray {
+        color: gray;
+      }
+      .green {
+        color: green;
+      }
+      .red {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-gray-50 p-1 shadow-lg pl-2">
+      <div
+        class="text-gray-800 text-3xl font-bold py-5 px-6"
+        style="font-family: 'Montserrat'"
+      >
+        Authorisation
+      </div>
+    </div>
+    <div class="bg-gray-800 text-gray-50 py-5 px-8">
+      <div
+        class="list-disc mx-5 text-lg my-4 space-y-2 tracking-wide"
+        style="font-family: 'Noto Sans KR'"
+      >
+        <!-- li tags here -->
+        <li>In the previous question, I took the example of Discord. Taking it further, lets talk about the role-based system in Discord.</li>
+        <li>With the role based system, we can assign different permissions to different users. For example, server admins are able to modify every setting on the server. They have the permission to kick or ban any other user from the server.</li>
+        <li>A normal user on the server may have permissions to only type in text channels.</li>
+        <li>A moderator may have permissions to delete messages from other users, or mute another user, but not to kick or ban someone from the server.</li>
+        <li>Therefore, each role is associated with a certain level of permission, allowing access to different functionality.</li>
+        <li>This is known as authorisation, that is, different roles, or different users are allowed to use different APIs available on a server. Not everybody can access a resource on the server, unless the server finds the permissions to be correct.</li>
+        <li>Just like we used a JWT to estabilish identity of the user in the previous question, we can also add some property to the payload, which identifies the permissions available to the user. An example could be as follow:</li>
+        <pre>
+          {
+            "email": "email of user",
+            "level": 2
+          }
+        </pre>
+        <li>(Assuming that the levels are 1, 2, 3 and 4, with 4 being the role with highest permissions.)</li>
+        <li>With a level of 2, the user may have the power to create new text channels, or create invites to the Discord server.</li>
+        <li>With a level of 4, the user may have full administrative access to the server.</li>
+      </div>
+    </div>
+    <h2 class="text-gray-800 bg-gray-100 text-xl px-7 font-mono pt-3">
+      Question:
+    </h2>
+    <div
+      class="
+        pt-4
+        text-md
+        bg-gray-100
+        font-semibold
+        text-lg
+        space-y-2.5
+        py-3
+        px-8
+        text-gray-800
+      "
+      style="font-family: 'Noto Sans Kr'"
+    >
+      <!-- h4 tags here -->
+      <h4></h4>
+      <h4>Write code for a backend server which implements a role based authorisation.</h4>
+      <h4>Here we have three users:</h4>
+      <div class="list-disc">
+        <li>Tom - permission 011</li>
+        <li>Jerry - permission 101</li>
+        <li>Spike - permission 100</li>
+      </div>
+      <br />
+      <h4>Let me define a special string which will designate the permissions availiable to these users.</h4>
+      <h4>Let the string be comprised of three characters, each of which is either "0" or "1". That gives us eights combinations of permissions.</h4>
+      <h4>Those combinations are: 000,001,010,011,100,101,110,111</h4>
+      <h4>0 refers to absence of permission, 1 refers to presence of permission.</h4>
+      <br />
+      <h4>The permissions provided with the three characters are:</h4>
+      <div class="list-disc">
+        <li>First character: allows to make MERGE request on <span class="code">/pull_request</span></li>
+        <li>Second character: allows to make SEARCH request on <span class="code">/repository</span></li>
+        <li>Third character: allows to make DELETE request on <span class="code">/old_files</span></li>
+      </div>
+      <h4>[You can read up about the methods like MERGE and SEARCH <a target="_blank" href="https://webconcepts.info/concepts/http-method/" class="text-gray-700 underline tracking-wider font-mono">here</a>.]</h4>
+      <h4>So a user with the permission string "010" will be able to make a successful request only on SEARCH <span class="code">/repository</span>. Another user with the permission string "111" will be able to make successful requests on all the three given paths.</h4>
+
+      <br />
+      <h4>For requests which are allowed (to a certain user), your server must respond with a status code of 200. You can leave the response body empty.</h4>
+      <h4>For requests which are allowed (to a certain user), you server must respond with a status code of 403, which means Forbidden.</h4>
+      <br />
+      <h4>This page will make multiple requests on any of the three paths given above at random. Each request will contain a header with the name 'token'. The token will be a JWT, whose payload will be of the following format:</h4>
+      <pre>
+        {
+          "username": "Tom"
+        }
+      </pre>
+      <h4>The username can be Tom, Jerry or Spike.</h4>
+      <h4>For each request, your server must check the permissions of the user (the permission are given at the start of the question) and return the corresponding response, as described above. You can get the username from the token, by decoding its payload.</h4>
+      <h4>For example, if Tom makes a request MERGE <span class="code">/pull_request</span>, the server should respond with status code 403. But if Tom makes a request DELETE <span class="code">/old_files</span>, then the response should be status code 200.</h4>
+      <h4>All the JWTs will be hashed using the key 'ctewebd'.</h4>
+
+      <div>
+        <form class="mb-4">
+          <span class="mr-2">Server address : </span>
+          <input
+            type="text"
+            id="address"
+            class="
+              rounded-sm
+              border-2 border-gray-800
+              mr-4
+			  mb-3
+              font-normal
+              text-lg
+			  px-2
+              py-0.75
+              focus:border-gray-800
+            "
+          />
+          <br>
+          <span
+            class="
+              bg-gray-800
+              cursor-pointer
+              text-gray-50
+              px-3
+              py-1.5
+              text-md
+              rounded-md
+            "
+            onclick="check()"
+            >Submit</span
+          >
+        </form>
+      </div>
+      <h2 class="my-3" id="tasklist">Objectives Checklist:</h2>
+      <div class="list-disc" id="list">
+        
+      </div>
+	  <div class="relative">
+		<a href="../index.html">
+	<span class="bg-gray-800 text-gray-50 px-3.5 py-2 rounded-md absolute right-0 bottom-2">Home</span>
+	</a>
+	</div>
+    </div>
+
+    <script language="JavaScript" type="text/javascript"
+      src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js">
+    </script>
+
+    <script type="text/javascript">
+      const users = ["Tom","Jerry","Spike"];
+      const requests = [{method:"MERGE", path:"/pull_request"},
+                        {method:"SEARCH", path:"/repository"},
+                        {method:"DELETE", path:"/old_files"}];
+      let random = [];
+      function genRandom(){
+        for(let x = 1; x <= 6; x++){
+          let u = users[Math.floor(Math.random() * 3)];
+          let r = requests[Math.floor(Math.random() * 3)];
+          random.push({
+            username: u,
+            method: r.method,
+            path: r.path
+          });
+
+          let li = document.createElement("li");
+          li.id = "o" + x;
+          li.classList.add("gray");
+          let text = document.createTextNode(`User: ${u}, Request: ${r.method} ${r.path}`);
+          li.appendChild(text);
+          document.querySelector('#list').appendChild(li);
+        }
+      }
+      window.onload = genRandom;
+
+      const permissions = {
+        "Tom": {"MERGE":403, "SEARCH": 200, "DELETE": 200},
+        "Jerry": {"MERGE":200, "SEARCH": 403, "DELETE": 200},
+        "Spike": {"MERGE":200, "SEARCH": 403, "DELETE": 403}
+      };
+
+      async function check(){
+        resetColors();
+        document.querySelector("#tasklist").innerHTML = "Objectives Checklist: Running";
+        const address = document.querySelector("#address").value;
+        let count = 1;
+        for(let elem of random){
+          try{
+            let res = await fetch(address + elem.path, {
+              method: elem.method,
+              headers: {
+                "token": generateJWT(elem.username)
+              }
+            });
+            if(res.status === permissions[elem.username][elem.method]){
+              right("o" + count);
+            } else {
+              wrong("o" + count)
+            }
+          } catch(err){
+            console.log("Oops, an error occured:",err);
+          } finally {
+            count += 1;
+          }
+        }
+
+        document.querySelector("#tasklist").innerHTML = "Objectives Checklist: Finished Running";
+      }
+
+      function generateJWT(user){
+        let headers = JSON.stringify({alg: 'HS256', typ: 'JWT'});
+        let payload = JSON.stringify({"username":user});
+        let token = KJUR.jws.JWS.sign("HS256", headers, payload, "ctewebd");
+        return token;
+      }
+
+      function resetColors() {
+        let arr = ["o1", "o2", "o3","o4","o5","o6"];
+        for (let elem of arr) {
+          document.querySelector("#" + elem).classList.remove("green");
+          document.querySelector("#" + elem).classList.remove("red");
+          document.querySelector("#" + elem).classList.add("gray");
+        }
+      }
+
+      function right(id) {
+        document.querySelector("#" + id).classList.remove("gray");
+        document.querySelector("#" + id).classList.add("green");
+      }
+
+      function wrong(id) {
+        document.querySelector("#" + id).classList.remove("gray");
+        document.querySelector("#" + id).classList.add("red");
+      }
+    </script>
+  </body>
+</html>
